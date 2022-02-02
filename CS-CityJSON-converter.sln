@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCJConverter", "src\CSCJCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCJConverter.console", "src\CSCJConverter.console\CSCJConverter.console.csproj", "{148C9FE5-2CFD-4D51-B3FF-CCF5B3F8C8AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCJConverter.tests", "src\CSCJConverter.tests\CSCJConverter.tests.csproj", "{0B0AD761-3E5F-4818-806A-9339E05C2AC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +28,14 @@ Global
 		{148C9FE5-2CFD-4D51-B3FF-CCF5B3F8C8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{148C9FE5-2CFD-4D51-B3FF-CCF5B3F8C8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{148C9FE5-2CFD-4D51-B3FF-CCF5B3F8C8AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B0AD761-3E5F-4818-806A-9339E05C2AC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B0AD761-3E5F-4818-806A-9339E05C2AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B0AD761-3E5F-4818-806A-9339E05C2AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B0AD761-3E5F-4818-806A-9339E05C2AC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5D5ACA9F-33C1-47EB-AE96-5194C7921C25} = {53A35023-E6FF-4698-B5F0-C4925CC9FC20}
 		{148C9FE5-2CFD-4D51-B3FF-CCF5B3F8C8AD} = {53A35023-E6FF-4698-B5F0-C4925CC9FC20}
+		{0B0AD761-3E5F-4818-806A-9339E05C2AC4} = {53A35023-E6FF-4698-B5F0-C4925CC9FC20}
 	EndGlobalSection
 EndGlobal
