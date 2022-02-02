@@ -1,0 +1,334 @@
+{
+  "type": "CityJSON",
+  "version": "1.1",
+  "CityObjects": {
+    "NL.IMBAG.Pand.0599100010014793-0": {
+      "attributes": {},
+      "geometry": [
+        {
+          "boundaries": [
+            [
+              [
+                [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9
+                ]
+              ],
+              [
+                [
+                  10,
+                  3,
+                  2,
+                  11
+                ]
+              ],
+              [
+                [
+                  12,
+                  9,
+                  8,
+                  13
+                ]
+              ],
+              [
+                [
+                  13,
+                  8,
+                  7,
+                  14
+                ]
+              ],
+              [
+                [
+                  11,
+                  2,
+                  1,
+                  15
+                ]
+              ],
+              [
+                [
+                  15,
+                  1,
+                  0,
+                  16
+                ]
+              ],
+              [
+                [
+                  16,
+                  0,
+                  9,
+                  12
+                ]
+              ],
+              [
+                [
+                  14,
+                  7,
+                  6,
+                  17
+                ]
+              ],
+              [
+                [
+                  17,
+                  6,
+                  5,
+                  18
+                ]
+              ],
+              [
+                [
+                  18,
+                  5,
+                  4,
+                  19
+                ]
+              ],
+              [
+                [
+                  19,
+                  4,
+                  3,
+                  10
+                ]
+              ],
+              [
+                [
+                  12,
+                  13,
+                  14,
+                  17,
+                  18,
+                  19,
+                  10,
+                  11,
+                  15,
+                  16
+                ]
+              ]
+            ]
+          ],
+          "lod": "2.2",
+          "semantics": {
+            "surfaces": [
+              {
+                "type": "GroundSurface"
+              },
+              {
+                "type": "RoofSurface"
+              },
+              {
+                "on_footprint_edge": true,
+                "type": "WallSurface"
+              },
+              {
+                "on_footprint_edge": false,
+                "type": "WallSurface"
+              }
+            ],
+            "values": [
+              [
+                0,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                1
+              ]
+            ]
+          },
+          "type": "Solid"
+        }
+      ],
+      "parents": [
+        "NL.IMBAG.Pand.0599100010014793"
+      ],
+      "type": "BuildingPart"
+    },
+    "NL.IMBAG.Pand.0599100010014793": {
+      "attributes": {
+        "h_maaiveld": -5.083000183105469,
+        "identificatie": "NL.IMBAG.Pand.0599100010014793"
+      },
+      "children": [
+        "NL.IMBAG.Pand.0599100010014793-0"
+      ],
+      "geometry": [],
+      "type": "Building"
+    }
+  },
+  "vertices": [
+    [
+      -38707,
+      156058,
+      -5083
+    ],
+    [
+      -36591,
+      156589,
+      -5083
+    ],
+    [
+      -36549,
+      156471,
+      -5083
+    ],
+    [
+      -36281,
+      156545,
+      -5083
+    ],
+    [
+      -35724,
+      154355,
+      -5083
+    ],
+    [
+      -35700,
+      154260,
+      -5083
+    ],
+    [
+      -35747,
+      154248,
+      -5083
+    ],
+    [
+      -37886,
+      153713,
+      -5083
+    ],
+    [
+      -38140,
+      153650,
+      -5083
+    ],
+    [
+      -38740,
+      156050,
+      -5083
+    ],
+    [
+      -36281,
+      156545,
+      -2716
+    ],
+    [
+      -36549,
+      156471,
+      -2677
+    ],
+    [
+      -38740,
+      156050,
+      -2362
+    ],
+    [
+      -38140,
+      153650,
+      -2363
+    ],
+    [
+      -37886,
+      153713,
+      -2400
+    ],
+    [
+      -36591,
+      156589,
+      -2675
+    ],
+    [
+      -38707,
+      156058,
+      -2366
+    ],
+    [
+      -35747,
+      154248,
+      -2712
+    ],
+    [
+      -35700,
+      154260,
+      -2719
+    ],
+    [
+      -35724,
+      154355,
+      -2719
+    ]
+  ],
+  "extensions": {
+    "MetadataExtended": {
+      "url": "https://raw.githubusercontent.com/cityjson/metadata-extended/main/metadata-extended.ext.json",
+      "version": "1.0"
+    }
+  },
+  "transform": {
+    "scale": [
+      0.001,
+      0.001,
+      0.001
+    ],
+    "translate": [
+      97854.99,
+      438577.88,
+      0.0
+    ]
+  },
+  "metadata": {
+    "geographicalExtent": [
+      97816.25,
+      438731.53,
+      -5.083,
+      97819.29000000001,
+      438734.469,
+      -2.362
+    ]
+  },
+  "+metadata-extended": {
+    "geographicLocation": "The Netherlands",
+    "citymodelIdentifier": "106a35fd-87ff-4c3a-b7f8-fbbc5b535730",
+    "datasetReferenceDate": "2022-01-24",
+    "datasetCharacterSet": "UTF-8",
+    "datasetTopicCategory": "geoscientificInformation",
+    "distributionFormatVersion": "1.1",
+    "spatialRepresentationType": "vector",
+    "fileIdentifier": "att_3dbag_6229.json",
+    "metadataStandard": "ISO 19115 - Geographic Information - Metadata",
+    "metadataStandardVersion": "ISO 19115:2014(E)",
+    "metadataCharacterSet": "UTF-8",
+    "metadataDateStamp": "2022-02-02",
+    "textures": "absent",
+    "materials": "absent",
+    "cityfeatureMetadata": {
+      "Building": {
+        "uniqueFeatureCount": 1,
+        "aggregateFeatureCount": 0,
+        "presentLoDs": {},
+        "BuildingParts": 1
+      }
+    },
+    "presentLoDs": {},
+    "thematicModels": [
+      "Building"
+    ]
+  }
+}

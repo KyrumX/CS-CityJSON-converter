@@ -20,4 +20,18 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="testfixtures" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="testfixtures/test_shed.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CSCJConverter\CSCJConverter.csproj" />
+  </ItemGroup>
+
 </Project>
