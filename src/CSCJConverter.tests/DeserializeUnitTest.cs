@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Xunit;
@@ -179,8 +180,8 @@ public class DeserializationTests : IClassFixture<JSONFixture>
 
         const string expectedLod = "2.2";
         const string expectedType = "Solid";
-        List<int> firstShapeList = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // List of vertices
-        List<int> lastShapeList = new List<int>() { 12, 13, 14, 17, 18, 19, 10, 11, 15, 16 }; // List of vertices
+        List<int> expectedFirstShapeList = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // List of vertices
+        List<int> expectedLastShapeList = new List<int>() { 12, 13, 14, 17, 18, 19, 10, 11, 15, 16 }; // List of vertices
         
         // Act
         List<GeometrySolid> geometries = this._fixture.SerializedCJ.CityObjects[childObjectID].geometry;
@@ -195,7 +196,21 @@ public class DeserializationTests : IClassFixture<JSONFixture>
         Assert.Equal(12, geometry.boundaries[0].Count);
         Assert.Single(geometry.boundaries[0][0]);
         Assert.Equal(10, geometry.boundaries[0][0][0].Count);
-        Assert.Equal(firstShapeList, geometry.boundaries[0][0][0]);
-        Assert.Equal(lastShapeList, geometry.boundaries[0][11][0]);
+        Assert.Equal(expectedFirstShapeList, geometry.boundaries[0][0][0]);
+        Assert.Equal(expectedLastShapeList, geometry.boundaries[0][11][0]);
+    }
+
+    /// <summary>
+    /// Test whether deserialization of the 'vertices' list was done correctly
+    /// Test checks the first and last vertices
+    /// </summary>
+    [Fact]
+    public void GetVertices_ReturnSameValuesAsFile()
+    {
+        List<int> expectedFirstVerticesList = new List<int>() { -38707, 156058, -5083 };
+        List<int> expectedLastVerticesList = new List<int>() { -35724, 154355, -2719 };
+        
+        Assert.Equal(expectedFirstVerticesList, this._fixture.SerializedCJ.vertices.First());
+        Assert.Equal(expectedLastVerticesList, this._fixture.SerializedCJ.vertices.Last());
     }
 }

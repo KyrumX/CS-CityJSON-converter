@@ -172,7 +172,7 @@ public class CityJSON
     /// </remarks>
     /// <param name="value">The decimal value in meters to be scaled to a CityJSON value. </param>
     /// <returns>An integer representing the value in CityJSON. </returns>
-    private int ScaleHeightMetersToCityJSON(decimal value)
+    public int ScaleHeightMetersToCityJSON(decimal value)
     {
         return Decimal.ToInt32(Math.Round(value / this._cityJson.transform.scale[2], 0));
     }
