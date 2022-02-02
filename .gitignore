@@ -404,3 +404,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 .idea/*
+
+resources/*
