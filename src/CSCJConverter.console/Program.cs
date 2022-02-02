@@ -10,8 +10,9 @@ public class Program
         
         string filePath = @"E:\Hogeschool Rotterdam\Afstuderen CityGIS\Projects\CS-CityJSON-converter\resources\";
         string fileName = "schuur.json";
+        string jsonString = File.ReadAllText(filePath + fileName);
         
-        CityJSON cj = new CityJSON(filePath + fileName);
+        CityJSON cj = new CityJSON(jsonString, "");
         cj.TranslateHeightMaaiveld();
         cj.Serialize();
         

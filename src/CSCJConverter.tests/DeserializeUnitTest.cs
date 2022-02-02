@@ -179,8 +179,8 @@ public class DeserializationTests : IClassFixture<JSONFixture>
 
         const string expectedLod = "2.2";
         const string expectedType = "Solid";
-        List<int> firstShapeList = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        List<int> lastShapeList = new List<int>() { 12, 13, 14, 17, 18, 19, 10, 11, 15, 16 };
+        List<int> firstShapeList = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // List of vertices
+        List<int> lastShapeList = new List<int>() { 12, 13, 14, 17, 18, 19, 10, 11, 15, 16 }; // List of vertices
         
         // Act
         List<GeometrySolid> geometries = this._fixture.SerializedCJ.CityObjects[childObjectID].geometry;
