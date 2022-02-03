@@ -82,7 +82,7 @@ public class CityJSON
                 // Bereken de waarde die we bij alle z-waarden moeten doen om bij z=0 te komen
                 decimal hCompensationValue = 0 - childMaaiveldDict[cityObject.Key].Value;
                 // Schaal de waarde
-                int scaledHeightCompensationValue = this.ScaleHeightMetersToCityJSON(hCompensationValue);
+                int scaledHeightCompensationValue = this.HeightMetersToCityJSON(hCompensationValue);
 
                 // Loop over de geometry objecten van het huidige CityObject
                 foreach (var geometry in cityObject.Value.geometry)
@@ -164,16 +164,53 @@ public class CityJSON
     }
 
     /// <summary>
-    /// Scale a decimal height value in meters to a CityJSON value
+    /// Converts a height (in meters, decimal) for the z-axis to a valid CityJSON value (int).
     /// </summary>
     /// <remarks>
-    /// CityJSON stores the coordinates of the vertices of the geometries as integer
-    /// values to reduce file size.
+    /// To reduce size of CityJSON file coordinates are represented as integers. A 'scale' and 'transform' is applied
+    /// to all coordinates. To get the real z-value (height) of a vertex:
+    /// v[2] = (vi[2] * ["transform"]["scale"][2]) + ["transform"]["translate"][2] ;
+    /// This function does the reverse: convert a real value in meters to a CityJSON integer value.
+    /// Refer to the official documentation for more information: <see href="https://www.cityjson.org/specs/1.1.0/#transform-object"/>
     /// </remarks>
-    /// <param name="value">The decimal value in meters to be scaled to a CityJSON value. </param>
-    /// <returns>An integer representing the value in CityJSON. </returns>
-    public int ScaleHeightMetersToCityJSON(decimal value)
+    /// <param name="metersValue">
+    ///     The value in meters represented as a decimal to be converted to a CityJSON value, an integer.
+    /// </param>
+    /// <returns>
+    ///     The height represented as a CityJSON integer (translated and scaled).
+    /// </returns>
+    public int HeightMetersToCityJSON(decimal metersValue)
     {
-        return Decimal.ToInt32(Math.Round(value / this.CityJson.transform.scale[2], 0));
+        // De formule moet omgedraaid worden: we willen van echt naar CityJSON.
+        // Dus eerst 'translaten' we de waarde:
+        decimal translatedHeight = this.TranslateHeightMetersToCityJSON(metersValue);
+
+        // Daarna schalen:
+        decimal scaledTranslatedHeight = this.ScaleHeightMetersToCityJSON(translatedHeight);
+
+        // CityJSON verwacht het als int, dus afronden en naar int omzetten:
+        return Decimal.ToInt32(Math.Round(scaledTranslatedHeight, 0));
+    }
+    
+    /// <summary>
+    /// Translates a decimal height using the CityJSON height translate factor.
+    /// </summary>
+    /// <param name="heightMeters">A decimal height value in meters.</param>
+    /// <returns>Decimal representing a translated height in meters.</returns>
+    private decimal TranslateHeightMetersToCityJSON(decimal heightMeters)
+    {
+        // height (z-axes) = (vi[2] * ["transform"]["scale"][2]) + ["transform"]["translate"][2]
+        // This function converts a scaled int to a translated CityJSON value (2nd part of the formula)
+        return (heightMeters - this.CityJson.transform.translate[2]);
+    }
+
+    /// <summary>
+    /// Scales a translated decimal height using the CityJSON height scale factor.
+    /// </summary>
+    /// <param name="translatedMeters">Translated decimal height value.</param>
+    /// <returns>Decimal representing a scaled height in meters.</returns>
+    private decimal ScaleHeightMetersToCityJSON(decimal translatedMeters)
+    {
+        return (translatedMeters / this.CityJson.transform.scale[2]);
     }
 }

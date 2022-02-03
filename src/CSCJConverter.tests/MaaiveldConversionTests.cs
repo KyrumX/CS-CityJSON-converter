@@ -26,16 +26,19 @@ public class MaaiveldConversionTests : IClassFixture<CityJSONFixture>
     }
     
     /// <summary>
-    /// Test the function which converts the height in meters from a decimal value to an integer
-    /// applying the scaling as defined in the CityJSON file
+    /// Test function which converts a 'real' value in meters (decimal) to a translated and scaled CityJSON value.
     /// </summary>
     [Fact]
-    public void TestScaleHeightMetersToCityJSON()
+    public void HeightMetersToCityJSON_ReturnsCorrectValue()
     {
         const decimal inputValue = 12.3456789m;
+        // De formule om van CityJSON naar echte waarde te gaan:
+        // v[2] = (vi[2] * ["transform"]["scale"][2]) + ["transform"]["translate"][2]
+        // Onze scale is 0.001 en de translate is 0.
+        // We verwachten dus: afronden((12.3456789 - 0) / 0.001) = 12346
         const int expectedValue = 12346;
 
-        int result = this.cityJson.ScaleHeightMetersToCityJSON(inputValue);
+        int result = this.cityJson.HeightMetersToCityJSON(inputValue);
         
         Assert.Equal(expectedValue, result);
     }
