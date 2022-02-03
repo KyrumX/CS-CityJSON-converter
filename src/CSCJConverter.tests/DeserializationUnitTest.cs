@@ -1,34 +1,18 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 using Xunit;
 
 namespace CSCJConverter.tests;
 
-/// <summary>
-/// Create a fixture for the deserialization of ou CityJSON
-/// Since we need it for every test, we use this fixture class
-/// </summary>
-public class JSONFixture
+[Collection("JSON Fixture")]
+public class DeserializationTests
 {
-    public CityJSONModel SerializedCJ { get; private set; }
-    public JSONFixture()
-    {
-        string testFile = @"testfixtures/test_shed.json";
-        string jsonString = File.ReadAllText(testFile);
-        this.SerializedCJ = JsonSerializer.Deserialize<CityJSONModel>(jsonString);
-    }
-}
-
-public class DeserializationTests : IClassFixture<JSONFixture>
-{
-    private readonly JSONFixture _fixture;
+    private readonly CityJSONModel cityJsonModel;
 
     public DeserializationTests(JSONFixture fixture)
     {
-        this._fixture = fixture;
+        this.cityJsonModel = fixture.CityJson.CityJson;
     }
     
     /// <summary>
@@ -39,7 +23,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const string expectedType = "CityJSON";
 
-        Assert.Equal(expectedType, this._fixture.SerializedCJ.type);
+        Assert.Equal(expectedType, this.cityJsonModel.type);
     }
     
     /// <summary>
@@ -50,7 +34,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const string expectedVersion = "1.1";
         
-        Assert.Equal(expectedVersion, this._fixture.SerializedCJ.version);
+        Assert.Equal(expectedVersion, this.cityJsonModel.version);
     }
 
     /// <summary>
@@ -61,7 +45,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const decimal expectedScaleX = 0.001m;
         
-        Assert.Equal(expectedScaleX, this._fixture.SerializedCJ.transform.scale[0]);
+        Assert.Equal(expectedScaleX, this.cityJsonModel.transform.scale[0]);
     }
     
     /// <summary>
@@ -72,7 +56,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const decimal expectedScaleY = 0.001m;
         
-        Assert.Equal(expectedScaleY, this._fixture.SerializedCJ.transform.scale[1]);
+        Assert.Equal(expectedScaleY, this.cityJsonModel.transform.scale[1]);
     }
     
     /// <summary>
@@ -83,7 +67,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const decimal expectedScaleZ = 0.001m;
         
-        Assert.Equal(expectedScaleZ, this._fixture.SerializedCJ.transform.scale[2]);
+        Assert.Equal(expectedScaleZ, this.cityJsonModel.transform.scale[2]);
     }
 
     /// <summary>
@@ -93,7 +77,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const decimal expectedTranslateX = 97854.99m;
         
-        Assert.Equal(expectedTranslateX, this._fixture.SerializedCJ.transform.translate[0]);
+        Assert.Equal(expectedTranslateX, this.cityJsonModel.transform.translate[0]);
     }
     
     /// <summary>
@@ -104,7 +88,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const decimal expectedTranslateY = 438577.88m;
         
-        Assert.Equal(expectedTranslateY, this._fixture.SerializedCJ.transform.translate[1]);
+        Assert.Equal(expectedTranslateY, this.cityJsonModel.transform.translate[1]);
     }
     
     /// <summary>
@@ -115,7 +99,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     {
         const decimal expectedTranslateZ = 0.0m;
         
-        Assert.Equal(expectedTranslateZ, this._fixture.SerializedCJ.transform.translate[2]);
+        Assert.Equal(expectedTranslateZ, this.cityJsonModel.transform.translate[2]);
     }
     
     /// <summary>
@@ -134,7 +118,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
         const string expectedType = "Building";
         
         // Act
-        CityObject cityObject = this._fixture.SerializedCJ.CityObjects[parentObjectID];
+        CityObject cityObject = this.cityJsonModel.CityObjects[parentObjectID];
         
         // Asserts
         Assert.Equal(expectedMaaiveld, cityObject.attributes.h_maaiveld);
@@ -158,7 +142,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
         const string expectedType = "BuildingPart";
 
         // Act
-        CityObject cityObject = this._fixture.SerializedCJ.CityObjects[childObjectID];
+        CityObject cityObject = this.cityJsonModel.CityObjects[childObjectID];
         
         // Asserts
         Assert.Null(cityObject.attributes.h_maaiveld);
@@ -184,7 +168,7 @@ public class DeserializationTests : IClassFixture<JSONFixture>
         List<int> expectedLastShapeList = new List<int>() { 12, 13, 14, 17, 18, 19, 10, 11, 15, 16 }; // List of vertices
         
         // Act
-        List<GeometrySolid> geometries = this._fixture.SerializedCJ.CityObjects[childObjectID].geometry;
+        List<GeometrySolid> geometries = this.cityJsonModel.CityObjects[childObjectID].geometry;
         GeometrySolid geometry = geometries[0];
         
         // Asserts
@@ -207,10 +191,12 @@ public class DeserializationTests : IClassFixture<JSONFixture>
     [Fact]
     public void GetVertices_ReturnSameValuesAsFile()
     {
+        int expectedCountVertices = 21;
         List<int> expectedFirstVerticesList = new List<int>() { -38707, 156058, -5083 };
-        List<int> expectedLastVerticesList = new List<int>() { -35724, 154355, -2719 };
-        
-        Assert.Equal(expectedFirstVerticesList, this._fixture.SerializedCJ.vertices.First());
-        Assert.Equal(expectedLastVerticesList, this._fixture.SerializedCJ.vertices.Last());
+        List<int> expectedLastVerticesList = new List<int>() { 155380, 287061, 30234 };
+
+        Assert.Equal(expectedCountVertices, this.cityJsonModel.vertices.Count);
+        Assert.Equal(expectedFirstVerticesList, this.cityJsonModel.vertices.First());
+        Assert.Equal(expectedLastVerticesList, this.cityJsonModel.vertices.Last());
     }
 }

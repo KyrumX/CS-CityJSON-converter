@@ -1,0 +1,11 @@
+﻿The test_shed.json file is our test file.
+While syntactically correct the file isn't 100% correct CityJSON 1.1.
+One extra vertex has been added, which does not belong to any of our buildings:
+    [
+      155380,
+      287061,
+      30234
+    ]
+This vertex is outside our 'geographicalExtent', which would make it invalid.
+This doesn't matter though since this vertex was added to verify it wouldn't be touched by our
+functionality, whereas all other vertices (which do belong to our shed) should be.

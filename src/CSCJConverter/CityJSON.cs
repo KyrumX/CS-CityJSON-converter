@@ -8,7 +8,7 @@ namespace CSCJConverter;
 /// </summary>
 public class CityJSON
 {
-    private CityJSONModel _cityJson;
+    public CityJSONModel CityJson { get; private set; }
     private readonly string _outputPath;
     
     /// <summary>
@@ -34,7 +34,7 @@ public class CityJSON
     private void Deserialize(string jsonString)
     {
         // TODO: Check if file was loaded and deserialized correctly?
-        this._cityJson = JsonSerializer.Deserialize<CityJSONModel>(jsonString);
+        this.CityJson = JsonSerializer.Deserialize<CityJSONModel>(jsonString);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class CityJSON
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
-        string serializeString = JsonSerializer.Serialize(this._cityJson, options);
+        string serializeString = JsonSerializer.Serialize(this.CityJson, options);
         string outFileName = @_outputPath; 
         File.WriteAllText(outFileName, serializeString);
     }
@@ -74,7 +74,7 @@ public class CityJSON
         HashSet<int> alreadyCorrectedVertices = new HashSet<int>();
         
         // Begin met het loopen over de CityObjecten
-        foreach (var cityObject in this._cityJson.CityObjects)
+        foreach (var cityObject in this.CityJson.CityObjects)
         {
             if (childMaaiveldDict.ContainsKey(cityObject.Key))
             {
@@ -134,10 +134,10 @@ public class CityJSON
         Dictionary<string, decimal?> identificatieMaaiveldDict = new Dictionary<string, decimal?>();
         
         // Zijn er wel objecten?
-        if (this._cityJson.CityObjects.Count == 0)
+        if (this.CityJson.CityObjects.Count == 0)
             return identificatieMaaiveldDict;
 
-        foreach (var cityObject in this._cityJson.CityObjects)
+        foreach (var cityObject in this.CityJson.CityObjects)
         {   
             // Check if the object even has a attribute with h_maaiveld
             if (cityObject.Value.attributes.h_maaiveld != null)
@@ -158,9 +158,9 @@ public class CityJSON
     /// <param name="value">The scaled meters value to be added to the current value. </param>
     private void ModifyHeight(int vertexIndex, int value)
     {
-        int currentValue = this._cityJson.vertices[vertexIndex][2];
+        int currentValue = this.CityJson.vertices[vertexIndex][2];
         int newValue = currentValue + value;
-        this._cityJson.vertices[vertexIndex][2] = newValue;
+        this.CityJson.vertices[vertexIndex][2] = newValue;
     }
 
     /// <summary>
@@ -174,6 +174,6 @@ public class CityJSON
     /// <returns>An integer representing the value in CityJSON. </returns>
     public int ScaleHeightMetersToCityJSON(decimal value)
     {
-        return Decimal.ToInt32(Math.Round(value / this._cityJson.transform.scale[2], 0));
+        return Decimal.ToInt32(Math.Round(value / this.CityJson.transform.scale[2], 0));
     }
 }
