@@ -9,14 +9,13 @@ public class Program
         Console.WriteLine("Reading file... \n");
         
         string filePath = @"E:\Hogeschool Rotterdam\Afstuderen CityGIS\Projects\CS-CityJSON-converter\resources\";
-        string fileName = "schuur.json";
+        string fileName = "3dbag_3340.json";
         string jsonString = File.ReadAllText(filePath + fileName);
         
-        CityJSON cj = new CityJSON(jsonString, "");
+        CityJSON cj = new CityJSON(jsonString, filePath + "3340test.json");
         cj.TranslateHeightMaaiveld();
         cj.Serialize();
-        
-        
+
         // var root = JsonSerializer.Deserialize<CityJSONModel>(jsonString);
         //
         // // TEMP ALLOW '+' TO GO THROUGH --TEST IF THIS IS NEEDED FOR CJIO

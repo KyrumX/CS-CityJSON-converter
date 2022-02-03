@@ -13,7 +13,7 @@ public class SerializationTest
     }
     
     [Fact]
-    public void Test_Serialize()
+    public void Serialize_EqualToInputFile()
     {
         // Act
         this._cityJson.Serialize();

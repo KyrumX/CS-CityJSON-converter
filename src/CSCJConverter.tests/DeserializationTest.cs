@@ -19,7 +19,7 @@ public class DeserializationTests
     /// Test whether deserialization of 'type' was done correctly
     /// </summary>
     [Fact]
-    public void GetType_InputIsCityJson_ReturnTrue()
+    public void GetType_ReturnSameValueAsFile()
     {
         const string expectedType = "CityJSON";
 
@@ -30,7 +30,7 @@ public class DeserializationTests
     /// Test whether deserialization of 'version' was done correctly
     /// </summary>
     [Fact]
-    public void GetVersion_InputIsOneOne_ReturnTrue()
+    public void GetVersion_ReturnSameValueAsFile()
     {
         const string expectedVersion = "1.1";
         

@@ -121,8 +121,10 @@ public class CityJSON
                     }
                 }
             }
-
         }
+        Console.WriteLine("Finished!");
+        Console.WriteLine(alreadyCorrectedVertices.Count);
+        Console.WriteLine(this.CityJson.vertices.Count);
     }
 
     /// <summary>

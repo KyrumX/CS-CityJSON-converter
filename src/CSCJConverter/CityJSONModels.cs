@@ -57,7 +57,7 @@ public class CityJSONModel
 {
     public string type { get; set; }
     public string version { get; set; }
-    public Dictionary<String, CityObject> CityObjects { get; set; }
+    public Dictionary<string, CityObject> CityObjects { get; set; }
     public List<List<int>> vertices { get; set; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public JsonObject extensions { get; set; }
