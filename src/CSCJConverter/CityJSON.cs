@@ -8,22 +8,33 @@ namespace CSCJConverter;
 /// </summary>
 public class CityJSON
 {
-    private string filePath;
-    private CityJSONModel _cityJson;
+    public CityJSONModel CityJson { get; private set; }
+    private readonly string _outputPath;
     
-    public CityJSON(string file)
+    /// <summary>
+    /// Constructor of the CityJSON class used to work with CityJSON objects.
+    /// Automatically deserializes (JSON) string
+    /// </summary>
+    /// <param name="jsonString">
+    ///     A string, result of File.ReadAllText function
+    /// </param>
+    /// <param name="outPath">
+    ///     The output path and filename + file extension (json), example:
+    ///     E:\my\path\filename.json
+    /// </param>
+    public CityJSON(string jsonString, string outPath)
     {
-        this.filePath = file;
-        this.Deserialize();
+        this._outputPath = outPath;
+        this.Deserialize(jsonString);
     }
     
     /// <summary>
     /// Deserialize a JSON file
     /// </summary>
-    private void Deserialize()
+    private void Deserialize(string jsonString)
     {
-        string jsonString = File.ReadAllText(filePath);
-        this._cityJson = JsonSerializer.Deserialize<CityJSONModel>(jsonString);
+        // TODO: Check if file was loaded and deserialized correctly?
+        this.CityJson = JsonSerializer.Deserialize<CityJSONModel>(jsonString);
     }
 
     /// <summary>
@@ -31,12 +42,17 @@ public class CityJSON
     /// </summary>
     public void Serialize()
     {
+        Console.WriteLine("Warning! UnsafeRelaxedJsonEscaping is being used. \n" +
+                          "Do not use the output of this function directly on publicly accessible content, such as \n" +
+                          "HTML pages without escaping/encoding it first!");
+        
+        // TODO: Disable UnsafeRelaxedJsonEscaping?
         var options = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
-        string serializeString = JsonSerializer.Serialize(this._cityJson, options);
-        string outFileName = @"E:\Hogeschool Rotterdam\Afstuderen CityGIS\Projects\CS-CityJSON-converter\test123.json"; 
+        string serializeString = JsonSerializer.Serialize(this.CityJson, options);
+        string outFileName = @_outputPath; 
         File.WriteAllText(outFileName, serializeString);
     }
 
@@ -58,7 +74,7 @@ public class CityJSON
         HashSet<int> alreadyCorrectedVertices = new HashSet<int>();
         
         // Begin met het loopen over de CityObjecten
-        foreach (var cityObject in this._cityJson.CityObjects)
+        foreach (var cityObject in this.CityJson.CityObjects)
         {
             if (childMaaiveldDict.ContainsKey(cityObject.Key))
             {
@@ -118,10 +134,10 @@ public class CityJSON
         Dictionary<string, decimal?> identificatieMaaiveldDict = new Dictionary<string, decimal?>();
         
         // Zijn er wel objecten?
-        if (this._cityJson.CityObjects.Count == 0)
+        if (this.CityJson.CityObjects.Count == 0)
             return identificatieMaaiveldDict;
 
-        foreach (var cityObject in this._cityJson.CityObjects)
+        foreach (var cityObject in this.CityJson.CityObjects)
         {   
             // Check if the object even has a attribute with h_maaiveld
             if (cityObject.Value.attributes.h_maaiveld != null)
@@ -142,9 +158,9 @@ public class CityJSON
     /// <param name="value">The scaled meters value to be added to the current value. </param>
     private void ModifyHeight(int vertexIndex, int value)
     {
-        int currentValue = this._cityJson.vertices[vertexIndex][2];
+        int currentValue = this.CityJson.vertices[vertexIndex][2];
         int newValue = currentValue + value;
-        this._cityJson.vertices[vertexIndex][2] = newValue;
+        this.CityJson.vertices[vertexIndex][2] = newValue;
     }
 
     /// <summary>
@@ -156,8 +172,8 @@ public class CityJSON
     /// </remarks>
     /// <param name="value">The decimal value in meters to be scaled to a CityJSON value. </param>
     /// <returns>An integer representing the value in CityJSON. </returns>
-    private int ScaleHeightMetersToCityJSON(decimal value)
+    public int ScaleHeightMetersToCityJSON(decimal value)
     {
-        return Decimal.ToInt32(Math.Round(value / this._cityJson.transform.scale[2], 0));
+        return Decimal.ToInt32(Math.Round(value / this.CityJson.transform.scale[2], 0));
     }
 }
