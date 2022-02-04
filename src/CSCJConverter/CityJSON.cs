@@ -61,12 +61,9 @@ public class CityJSON
     /// </summary>
     public void TranslateHeightMaaiveld()
     {
-        // Alleen 'parent' objecten hebben de h_maaiveld attribuut, de objecten staan
-        // allemaal in dezelfde lijst, 'children' dus ook. Loop één keer over de lijst en
-        // verzamel de h_maaiveld waarde (value) en koppel deze aan een het id van het kind (key)
-        Dictionary<string, decimal?> childMaaiveldDict = this.CollectMaaiveldValues();
         
-        if (childMaaiveldDict.Count == 0)
+        // Controleer of er objecten zijn:
+        if (this.CityJson.CityObjects.Count == 0)
             return;
 
         // Hoekpunten kunnen worden hergebruikt, om te voorkomen dat we ze meerdere keren ophogen
@@ -76,48 +73,52 @@ public class CityJSON
         // Begin met het loopen over de CityObjecten
         foreach (var cityObject in this.CityJson.CityObjects)
         {
-            if (childMaaiveldDict.ContainsKey(cityObject.Key))
+            // Is dit een 'ouder' object?
+            if (cityObject.Value.attributes.h_maaiveld != null)
             {
-
                 // Bereken de waarde die we bij alle z-waarden moeten doen om bij z=0 te komen
-                decimal hCompensationValue = 0 - childMaaiveldDict[cityObject.Key].Value;
+                decimal hCompensationValue = (decimal)(0 - cityObject.Value.attributes.h_maaiveld);
                 // Schaal de waarde
                 int scaledHeightCompensationValue = this.HeightMetersToCityJSON(hCompensationValue);
-
-                // Loop over de geometry objecten van het huidige CityObject
-                foreach (var geometry in cityObject.Value.geometry)
+                
+                // Loop over de 'kind' objecten heen
+                foreach (string childIdentificatie in cityObject.Value.children)
                 {
-                    // Ondersteunen alleen LOD22 en type Solid
-                    // Meer informatie over de opbouw van solid arrays:
-                    // - https://www.cityjson.org/dev/geom-arrays/#solid
-                    // - https://www.cityjson.org/specs/1.1.0/#arrays-to-represent-boundaries
-                    if (geometry.lod == "2.2" && geometry.type == "Solid")
+                    // Loop over de geometry objecten van het 'kind' CityObject
+                    foreach (var geometry in this.CityJson.CityObjects[childIdentificatie].geometry)
                     {
-                        foreach (var boundary in geometry.boundaries)
+                        // Ondersteunen alleen LOD22 en type Solid
+                        // Meer informatie over de opbouw van solid arrays:
+                        // - https://www.cityjson.org/dev/geom-arrays/#solid
+                        // - https://www.cityjson.org/specs/1.1.0/#arrays-to-represent-boundaries
+                        if (geometry.lod == "2.2" && geometry.type == "Solid")
                         {
-                            foreach (var shell in boundary)
+                            foreach (var boundary in geometry.boundaries)
                             {
-                                foreach (var item in shell)
+                                foreach (var shell in boundary)
                                 {
-                                    foreach (var vertex in item)
+                                    foreach (var item in shell)
                                     {
-                                        // Update the vertex height
-                                        if (alreadyCorrectedVertices.Contains(vertex) == false)
+                                        foreach (var vertex in item)
                                         {
-                                            this.ModifyHeight(vertex, scaledHeightCompensationValue);
-                                            alreadyCorrectedVertices.Add(vertex);
+                                            // Update the vertex height
+                                            if (alreadyCorrectedVertices.Contains(vertex) == false)
+                                            {
+                                                this.ModifyHeight(vertex, scaledHeightCompensationValue);
+                                                alreadyCorrectedVertices.Add(vertex);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Geometry found which is not LOD22 or type Solid \n" +
-                                          "CityObject ID: " + cityObject.Key.ToString() + " \n" +
-                                          "Geometry type: " + geometry.type.ToString() + " \n" + 
-                                          "Geometry LOD: " + geometry.lod.ToString()); 
+                        else
+                        {
+                            Console.WriteLine("Geometry found which is not LOD22 or type Solid \n" +
+                                              "CityObject ID: " + cityObject.Key.ToString() + " \n" +
+                                              "Geometry type: " + geometry.type.ToString() + " \n" + 
+                                              "Geometry LOD: " + geometry.lod.ToString()); 
+                        }
                     }
                 }
             }
@@ -130,6 +131,9 @@ public class CityJSON
     /// <summary>
     /// Build a dictonary CityObject ID of childeren (key) and the h_maaiveld value (value)
     /// </summary>
+    /// <remarks>
+    /// This function is no longer used.
+    /// </remarks>
     /// <returns>Dictonary containing the h_maaiveld value linked to the CityObject ID</returns>
     private Dictionary<string, decimal?> CollectMaaiveldValues()
     {
