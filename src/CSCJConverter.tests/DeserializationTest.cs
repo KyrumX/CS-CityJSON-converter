@@ -73,7 +73,8 @@ public class DeserializationTests
     /// <summary>
     /// Test whether deserialization of the 'translate' of the x-axis was done correctly
     /// </summary>
-    [Fact] public void GetTranslateX_ReturnsSameValueAsFile()
+    [Fact]
+    public void GetTranslateX_ReturnsSameValueAsFile()
     {
         const decimal expectedTranslateX = 97854.99m;
         
