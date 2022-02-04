@@ -1,4 +1,4 @@
-# CS-CityJSON-converter ![Package (test, build)](https://github.com/KyrumX/CS-CityJSON-converter/actions/workflows/workflow.yml/badge.svg)
+# CS-CityJSON-converter [![dotnet package](https://github.com/KyrumX/CS-CityJSON-converter/actions/workflows/workflow.yml/badge.svg)](https://github.com/KyrumX/CS-CityJSON-converter/actions/workflows/workflow.yml)
 
   C# applicatie voor het bewerken van CityJSON 1.1 3D BAG bestanden.
   
