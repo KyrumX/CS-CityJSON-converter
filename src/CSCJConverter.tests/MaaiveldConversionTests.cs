@@ -52,6 +52,7 @@ public class MaaiveldConversionTests : IClassFixture<CityJSONFixture>
     public void TestModifyHeight()
     {
         // Arrange
+        int expectedVerticesUpdated = 20;
         List<int> expectedVertexZero = new List<int>() {-38707, 156058, 0};
         List<int> expectedVertexTwo = new List<int>() {-36549, 156471, 0};
         List<int> expectedVertexSeventeen = new List<int>() { -35747, 154248, 2371 };
@@ -60,9 +61,10 @@ public class MaaiveldConversionTests : IClassFixture<CityJSONFixture>
         List<int> expectedVertexTwenty = new List<int>() {155380, 287061, 30234};
         
         // Act
-        this.cityJson.TranslateHeightMaaiveld();
+        var res = this.cityJson.TranslateHeightMaaiveld();
         
         // Assert
+        Assert.Equal(expectedVerticesUpdated, res);
         Assert.Equal(expectedVertexZero, this.cityJson.CityJson.vertices[0]);
         Assert.Equal(expectedVertexTwo, this.cityJson.CityJson.vertices[2]);
         Assert.Equal(expectedVertexSeventeen, this.cityJson.CityJson.vertices[17]);

@@ -59,12 +59,16 @@ public class CityJSON
     /// <summary>
     /// Moves the z-axes (height) of CityJSON objects to z=0 by using the h_maaiveld value
     /// </summary>
-    public void TranslateHeightMaaiveld()
+    /// <returns>
+    ///     Integer representing the amount of vertices updated. Can be used to check if
+    ///     all vertices have been updated. Returns null if CityObjects was empty.
+    /// </returns>
+    public int? TranslateHeightMaaiveld()
     {
         
         // Controleer of er objecten zijn:
         if (this.CityJson.CityObjects.Count == 0)
-            return;
+            return null;
 
         // Hoekpunten kunnen worden hergebruikt, om te voorkomen dat we ze meerdere keren ophogen
         // houden we bij welke reeds zijn opgehoogd
@@ -114,10 +118,12 @@ public class CityJSON
                         }
                         else
                         {
-                            Console.WriteLine("Geometry found which is not LOD22 or type Solid \n" +
-                                              "CityObject ID: " + cityObject.Key.ToString() + " \n" +
-                                              "Geometry type: " + geometry.type.ToString() + " \n" + 
-                                              "Geometry LOD: " + geometry.lod.ToString()); 
+                            throw new NotSupportedException("Geometry with type not equal to " +
+                                                            "Solid or LOD not equal to 2.2 not " +
+                                                            "supported." +
+                                                            "Type: " + geometry.type + " " +
+                                                            "LOD: " + geometry.lod + " " +
+                                                            "Object key: " + cityObject.Key);
                         }
                     }
                 }
@@ -126,6 +132,7 @@ public class CityJSON
         Console.WriteLine("Finished!");
         Console.WriteLine(alreadyCorrectedVertices.Count);
         Console.WriteLine(this.CityJson.vertices.Count);
+        return alreadyCorrectedVertices.Count;
     }
 
     /// <summary>
