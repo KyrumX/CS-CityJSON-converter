@@ -71,4 +71,19 @@ public class MaaiveldConversionTests : IClassFixture<CityJSONFixture>
         Assert.Equal(expectedVertexNineteen, this.cityJson.CityJson.vertices[19]);
         Assert.Equal(expectedVertexTwenty, this.cityJson.CityJson.vertices[20]);
     }
+
+    /// <summary>
+    /// Test if the bbox is updated correctly. Z-values should have been corrected while x,y should be unchanged.
+    /// Originally it was minz= -5.083 and maxz=-2.362
+    /// Moving to 0-based we expect minz=0 and maxz=2.721
+    /// </summary>
+    [Fact]
+    public void TestTransformGeographicalExtentZToZero()
+    {
+        double[] expectedArray = new double[6] { 97816.25, 438731.53, 0, 97819.29000000001, 438734.469, 2.721 };
+        
+        this.cityJson.TransformGeographicalExtentZToZero();
+        
+        Assert.Equal(expectedArray, this.cityJson.CityJson.metadata.geographicalExtent);
+    }
 }

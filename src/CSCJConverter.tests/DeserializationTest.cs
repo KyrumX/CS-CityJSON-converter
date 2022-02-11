@@ -102,6 +102,17 @@ public class DeserializationTests
         
         Assert.Equal(expectedTranslateZ, this.cityJsonModel.transform.translate[2]);
     }
+
+    /// <summary>
+    /// Test whether deserialization of the 'Geographical Extent' array was done correctly
+    /// </summary>
+    [Fact]
+    public void GetGeographicalExtent_ReturnsSameValueAsFile()
+    {
+        double[] expectedArray = new double[6] { 97816.25,438731.53,-5.083,97819.29000000001,438734.469,-2.362 };
+        
+        Assert.Equal(expectedArray, this.cityJsonModel.metadata.geographicalExtent);
+    }
     
     /// <summary>
     /// Test whether deserialization of the parent 'CityObject' was done correctly

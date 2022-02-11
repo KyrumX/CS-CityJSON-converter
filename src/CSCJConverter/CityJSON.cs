@@ -57,7 +57,8 @@ public class CityJSON
     }
 
     /// <summary>
-    /// Moves the z-axes (height) of CityJSON objects to z=0 by using the h_maaiveld value
+    /// Moves the z-axes (height) of CityJSON objects to be z=0 based by using the h_maaiveld value.
+    /// Ergo, buildings will all start from z=0 instead of from a real elevation value unique to the building.
     /// </summary>
     /// <returns>
     ///     Integer representing the amount of vertices updated. Can be used to check if
@@ -225,5 +226,35 @@ public class CityJSON
     private decimal ScaleHeightMetersToCityJSON(decimal translatedMeters)
     {
         return (translatedMeters / this.CityJson.transform.scale[2]);
+    }
+
+    /// <summary>
+    /// Move the geographical extent (bbox) Z-values to be 0 based.
+    /// This means that that minz will be changed by 0 - minz and maxz will be changed by the same value.
+    /// </summary>
+    /// <remarks>
+    /// Can be executed after all models have been moved to be z-value 0 based.
+    /// </remarks>
+    public void TransformGeographicalExtentZToZero()
+    {
+        // Waarde waarmee bbox mee moet worden gecorrigeerd is gelijk aan: 0 - minz
+        // Immers zijn alle z-waarden gecorrigeerd met 0 - maaiveld
+        double correctionValue = 0 - this.CityJson.metadata.geographicalExtent[2];
+        
+        // Corrigeer de minz en maxz met de correctie waarde
+        this.AddValueBoundingBox(2, correctionValue);
+        this.AddValueBoundingBox(5, correctionValue);
+    }
+
+    /// <summary>
+    /// Update the value of the bbox at a certain index by adding a certain value.
+    /// </summary>
+    /// <param name="index">Positional index of the bbox value.</param>
+    /// <param name="value">Value to be added to the bbox value at the given index.</param>
+    private void AddValueBoundingBox(int index, double value)
+    {
+        double oldValue = this.CityJson.metadata.geographicalExtent[index];
+        double newValue = oldValue + value;
+        this.CityJson.metadata.geographicalExtent[index] = newValue;
     }
 }
