@@ -51,6 +51,20 @@ public class Transform
 }
 
 /// <summary>
+/// Class to represent the 'Metadata' of a CityJSON file
+/// </summary>
+public class Metadata
+{
+    public string identifier { get; set; }
+    public JsonObject pointOfContact { get; set; }
+    public string title { get; set; }
+    public string referenceDate { get; set; }
+    public double[] geographicalExtent { get; set; }
+    public string referenceSystem { get; set; }
+    
+}
+
+/// <summary>
 /// Class to represent the 'root' of a CityJSON file
 /// </summary>
 public class CityJSONModel
@@ -63,7 +77,7 @@ public class CityJSONModel
     public JsonObject extensions { get; set; }
     public Transform transform { get; set; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public JsonObject metadata { get; set; }
+    public Metadata metadata { get; set; }
     
     [JsonPropertyName("+metadata-extended")]
     public JsonObject MetadataExtended { get; set; }
