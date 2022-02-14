@@ -125,7 +125,7 @@ public class DeserializationTests
 
         const decimal expectedMaaiveld = -5.083000183105469m;
         const string expectedIdentificatie = "NL.IMBAG.Pand.0599100010014793";
-        List<string> expectedChildren = new List<string> { "NL.IMBAG.Pand.0599100010014793-0" };
+        IEnumerable<string> expectedChildren = new string[] { "NL.IMBAG.Pand.0599100010014793-0" };
         List<GeometrySolid> expectedEmptyGeomList = new List<GeometrySolid> { };
         const string expectedType = "Building";
         
@@ -150,7 +150,7 @@ public class DeserializationTests
         // Arrange
         const string childObjectID = "NL.IMBAG.Pand.0599100010014793-0";
         
-        List<string> expectedParents = new List<string> { "NL.IMBAG.Pand.0599100010014793" };
+        IEnumerable<string> expectedParents = new string[] { "NL.IMBAG.Pand.0599100010014793" };
         const string expectedType = "BuildingPart";
 
         // Act
@@ -176,8 +176,8 @@ public class DeserializationTests
 
         const string expectedLod = "2.2";
         const string expectedType = "Solid";
-        List<int> expectedFirstShapeList = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // List of vertices
-        List<int> expectedLastShapeList = new List<int>() { 12, 13, 14, 17, 18, 19, 10, 11, 15, 16 }; // List of vertices
+        IEnumerable<int> expectedFirstShapeList = new int[10] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // List of vertices
+        IEnumerable<int> expectedLastShapeList = new int[10]{ 12, 13, 14, 17, 18, 19, 10, 11, 15, 16 }; // List of vertices
         
         // Act
         List<GeometrySolid> geometries = this.cityJsonModel.CityObjects[childObjectID].geometry;
@@ -204,8 +204,8 @@ public class DeserializationTests
     public void GetVertices_ReturnSameValuesAsFile()
     {
         int expectedCountVertices = 21;
-        List<int> expectedFirstVerticesList = new List<int>() { -38707, 156058, -5083 };
-        List<int> expectedLastVerticesList = new List<int>() { 155380, 287061, 30234 };
+        IEnumerable<int> expectedFirstVerticesList = new int[3] { -38707, 156058, -5083 };
+        IEnumerable<int> expectedLastVerticesList = new int[3] { 155380, 287061, 30234 };
 
         Assert.Equal(expectedCountVertices, this.cityJsonModel.vertices.Count);
         Assert.Equal(expectedFirstVerticesList, this.cityJsonModel.vertices.First());
