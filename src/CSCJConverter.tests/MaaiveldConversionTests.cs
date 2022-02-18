@@ -53,12 +53,12 @@ public class MaaiveldConversionTests : IClassFixture<CityJSONFixture>
     {
         // Arrange
         int expectedVerticesUpdated = 20;
-        List<int> expectedVertexZero = new List<int>() {-38707, 156058, 0};
-        List<int> expectedVertexTwo = new List<int>() {-36549, 156471, 0};
-        List<int> expectedVertexSeventeen = new List<int>() { -35747, 154248, 2371 };
-        List<int> expectedVertexNineteen = new List<int>() {-35724, 154355, 2364};
+        IEnumerable<int> expectedVertexZero = new int[3] {-38707, 156058, 0};
+        IEnumerable<int> expectedVertexTwo = new int[3] {-36549, 156471, 0};
+        IEnumerable<int> expectedVertexSeventeen = new int[3] { -35747, 154248, 2371 };
+        IEnumerable<int> expectedVertexNineteen = new int[3] {-35724, 154355, 2364};
         // Control vertex (index 20) doesn't belong to any building, thus shouldn't have been modified
-        List<int> expectedVertexTwenty = new List<int>() {155380, 287061, 30234};
+        IEnumerable<int> expectedVertexTwenty = new int[3] {155380, 287061, 30234};
         
         // Act
         var res = this.cityJson.TranslateHeightMaaiveld();
