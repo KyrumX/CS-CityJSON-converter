@@ -10,9 +10,9 @@ namespace CSCJConverter;
 public class Attributes
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public decimal? h_maaiveld { get; set; }
+    public decimal? h_maaiveld { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public string identificatie { get; set; }
+    public string identificatie { get; init; }
 }
 
 /// <summary>
@@ -22,9 +22,9 @@ public class Attributes
 public class GeometrySolid
 {
     public List<List<List<List<int>>>> boundaries { get; set; }
-    public string lod { get; set; }
-    public JsonObject semantics { get; set; }
-    public string type { get; set; }
+    public string lod { get; init; }
+    public JsonObject semantics { get; init; }
+    public string type { get; init; }
 }
 
 /// <summary>
@@ -32,13 +32,13 @@ public class GeometrySolid
 /// </summary>
 public class CityObject
 {
-    public Attributes attributes { get; set; }
+    public Attributes attributes { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public List<string> children { get; set; }
-    public List<GeometrySolid> geometry { get; set; }
+    public List<string> children { get; init; }
+    public List<GeometrySolid> geometry { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public List<string> parents { get; set; }
-    public string type { get; set; }
+    public List<string> parents { get; init; }
+    public string type { get; init; }
 }
 
 /// <summary>
@@ -46,8 +46,8 @@ public class CityObject
 /// </summary>
 public class Transform
 {
-    public List<decimal> scale { get; set; }
-    public List<decimal> translate { get; set; }
+    public List<decimal> scale { get; init; }
+    public List<decimal> translate { get; init; }
 }
 
 /// <summary>
@@ -55,12 +55,12 @@ public class Transform
 /// </summary>
 public class Metadata
 {
-    public string identifier { get; set; }
-    public JsonObject pointOfContact { get; set; }
-    public string title { get; set; }
-    public string referenceDate { get; set; }
-    public double[] geographicalExtent { get; set; }
-    public string referenceSystem { get; set; }
+    public string identifier { get; init; }
+    public JsonObject pointOfContact { get; init; }
+    public string title { get; init; }
+    public string referenceDate { get; init; }
+    public double[] geographicalExtent { get; init; }
+    public string referenceSystem { get; init; }
     
 }
 
@@ -69,16 +69,16 @@ public class Metadata
 /// </summary>
 public class CityJSONModel
 {
-    public string type { get; set; }
-    public string version { get; set; }
-    public Dictionary<string, CityObject> CityObjects { get; set; }
-    public List<List<int>> vertices { get; set; }
+    public string type { get; init; }
+    public string version { get; init; }
+    public Dictionary<string, CityObject> CityObjects { get; init; }
+    public List<List<int>> vertices { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public JsonObject extensions { get; set; }
-    public Transform transform { get; set; }
+    public JsonObject extensions { get; init; }
+    public Transform transform { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Metadata metadata { get; set; }
+    public Metadata metadata { get; init; }
     
     [JsonPropertyName("+metadata-extended")]
-    public JsonObject MetadataExtended { get; set; }
+    public JsonObject MetadataExtended { get; init; }
 }
