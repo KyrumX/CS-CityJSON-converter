@@ -68,7 +68,7 @@ public abstract class AbstractTileset : ITileset
     ///     tiles, the length of this array is zero, and children may not be defined.
     /// </param>
     /// <returns>A TilesetModel which can be serialized to a tileset.json file.</returns>
-    protected TilesetModel GenerateTileSet(IList<Tile> children)
+    protected TilesetModel BuildTileSet(IList<Tile> children)
     {
         Asset asset = new Asset()
         {
@@ -114,6 +114,7 @@ public abstract class AbstractTileset : ITileset
         };
     }
 
+    public abstract TilesetModel GenerateTileset();
     public abstract void AddTile(double[] geographicalExtent, string uri);
 
     /// <summary>

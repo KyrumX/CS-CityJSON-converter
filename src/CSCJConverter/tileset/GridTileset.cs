@@ -40,10 +40,10 @@ public class GridTileset : AbstractTileset
     /// Generate a TilesetModel, which can be serialized to json. Children will use a grid setup.
     /// </summary>
     /// <returns>TilesetModel, can be serialized to json for a tileset.json file.</returns>
-    public TilesetModel GenerateGridTileset()
+    public override TilesetModel GenerateTileset()
     {
         var children = this._tiles;
-        return this.GenerateTileSet(children);
+        return this.BuildTileSet(children);
     }
 
     /// <summary>
