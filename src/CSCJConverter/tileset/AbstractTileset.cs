@@ -165,7 +165,6 @@ public abstract class AbstractTileset : ITileset
     /// <returns>The center of both coords as decimal.</returns>
     protected decimal CalculateCenter(decimal maxCoordPoint, decimal minCoordPoint)
     {
-        Console.WriteLine(this.CalculateHalfLength(maxCoordPoint, minCoordPoint));
         return this.CalculateHalfLength(maxCoordPoint, minCoordPoint) + minCoordPoint;
     }
 
