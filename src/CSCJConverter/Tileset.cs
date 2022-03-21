@@ -16,6 +16,7 @@ public class Tileset
 
     private decimal _tilesetGeometricError;
     private decimal _rootGeometricError;
+    private decimal _tileGeometricError;
 
     public enum RefineMethods
     {
@@ -36,17 +37,37 @@ public class Tileset
     /// <summary>
     /// Constructor for the Tileset class used to build a tileset.
     /// </summary>
+    /// <param name="tilesetGeometricError">
+    ///     The error, in meters, introduced if this tileset is not rendered. At runtime, the geometric error is used
+    ///     to compute screen space error (SSE), i.e., the error measured in pixels. Default: 260
+    /// </param>
+    /// <param name="rootGeometricError">
+    ///     Nonnegative number that defines the error, in meters. Is used at runtime to determine the SSE at which the
+    ///     root tile's children are rendered. Default: 4.5398975185470771
+    /// </param>
+    /// <param name="tileGeometricError">
+    ///     The error, in meters, introduced if this tile is rendered and its children are not. At runtime,
+    ///     the geometric error is used to compute screen space error (SSE), i.e., the error measured in pixels.
+    ///     Default: 2.3232
+    /// </param>
     /// <param name="version">Default: 1.0</param>
     /// <param name="gltfUpAxis">Default: z</param>
     /// <param name="refineMethod">Default: REPLACE</param>
     /// <param name="structureType">Default: GRID</param>
-    public Tileset(string version = "1.0", string gltfUpAxis = "z", RefineMethods refineMethod = RefineMethods.REPLACE,
+    public Tileset(decimal tilesetGeometricError = 260,
+        decimal rootGeometricError = 4.5398975185470771m,
+        decimal tileGeometricError = 2.3232m,
+        string version = "1.0",
+        string gltfUpAxis = "z",
+        RefineMethods refineMethod = RefineMethods.REPLACE,
         StructureTypes structureType = StructureTypes.GRID)
     {
         this._version = version;
         this._gltfUpAxis = gltfUpAxis;
         this._rootRefineMethod = refineMethod == RefineMethods.ADD ? "ADD" : "REPLACE";
-        this._rootGeometricError = 4.5398975185470771m;
+        this._tilesetGeometricError = tilesetGeometricError;
+        this._rootGeometricError = rootGeometricError;
+        this._tileGeometricError = tileGeometricError;
 
         if (structureType == StructureTypes.GRID)
         {
@@ -106,7 +127,7 @@ public class Tileset
         {
             asset = asset,
             root = root,
-            geometricError = 260m
+            geometricError = _tilesetGeometricError
         };
     }
     
@@ -152,7 +173,7 @@ public class Tileset
         {
             boundingVolume = boxVolume,
             content = content,
-            geometricError = 2.3232m
+            geometricError = this._tileGeometricError
         };
         
         this._tiles.Add(tile);
