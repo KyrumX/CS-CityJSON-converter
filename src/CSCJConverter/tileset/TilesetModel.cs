@@ -1,8 +1,12 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace CSCJConverter;
+namespace CSCJConverter.tileset;
 
+
+/// <summary>
+/// Tileset model for a 3D Tiles tileset.json file.
+/// Does not fully implement the spec (e.g. not all options are allowed!)
+/// </summary>
 
 public class BoxVolume
 {
@@ -34,7 +38,7 @@ public class Root
     public BoxVolume boundingVolume { get; init; }
     public int[] transform { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public List<Tile> children { get; init; }
+    public IEnumerable<Tile> children { get; init; }
     public decimal geometricError { get; init; }
     public string refine { get; init; }
 }

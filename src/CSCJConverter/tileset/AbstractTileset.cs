@@ -1,8 +1,6 @@
-﻿using CSCJConverter.structures;
+﻿namespace CSCJConverter.tileset;
 
-namespace CSCJConverter;
-
-public class Tileset
+public abstract class AbstractTileset : ITileset
 {
     private decimal? _maxX;
     private decimal? _maxY;
@@ -11,31 +9,22 @@ public class Tileset
     private decimal? _minY;
     private decimal? _minZ;
 
-    private string _version;
-    private string _gltfUpAxis;
+    private readonly string _version;
+    private readonly string _gltfUpAxis;
 
-    private decimal _tilesetGeometricError;
-    private decimal _rootGeometricError;
-    private decimal _tileGeometricError;
+    private readonly decimal _tilesetGeometricError;
+    private readonly decimal _rootGeometricError;
+    protected decimal _tileGeometricError;
 
     public enum RefineMethods
     {
         ADD,
         REPLACE
     }
-
     private string _rootRefineMethod;
-    
-    public enum StructureTypes
-    {
-        GRID,    
-    }
-    private IStructure _structureGenerator;
-
-    private List<Tile> _tiles;
 
     /// <summary>
-    /// Constructor for the Tileset class used to build a tileset.
+    /// Constructor for the base Tileset class used to build a tileset.
     /// </summary>
     /// <param name="tilesetGeometricError">
     ///     The error, in meters, introduced if this tileset is not rendered. At runtime, the geometric error is used
@@ -54,13 +43,12 @@ public class Tileset
     /// <param name="gltfUpAxis">Default: z</param>
     /// <param name="refineMethod">Default: REPLACE</param>
     /// <param name="structureType">Default: GRID</param>
-    public Tileset(decimal tilesetGeometricError = 260,
+    public AbstractTileset(decimal tilesetGeometricError = 260,
         decimal rootGeometricError = 4.5398975185470771m,
         decimal tileGeometricError = 2.3232m,
         string version = "1.0",
         string gltfUpAxis = "z",
-        RefineMethods refineMethod = RefineMethods.REPLACE,
-        StructureTypes structureType = StructureTypes.GRID)
+        RefineMethods refineMethod = RefineMethods.REPLACE)
     {
         this._version = version;
         this._gltfUpAxis = gltfUpAxis;
@@ -68,23 +56,20 @@ public class Tileset
         this._tilesetGeometricError = tilesetGeometricError;
         this._rootGeometricError = rootGeometricError;
         this._tileGeometricError = tileGeometricError;
-
-        if (structureType == StructureTypes.GRID)
-        {
-            this._structureGenerator = new GridStructure();
-        }
-
-        this._tiles = new List<Tile>();
     }
 
     /// <summary>
-    /// Generate a TilesetModel which can be serialized.
+    /// Base generator for a tileset. Adds an IEnumerable of children onto a root
+    /// tile. Does not support content on the root tile!
     /// </summary>
-    /// <returns>TilesetModel used for serialization.</returns>
-    public TilesetModel GenerateTileSet()
+    /// <param name="children">
+    ///     An array of objects that define child tiles. Each child tile content is fully enclosed by its parent tile's
+    ///     bounding volume and, generally, has a geometricError less than its parent tile's geometricError. For leaf
+    ///     tiles, the length of this array is zero, and children may not be defined.
+    /// </param>
+    /// <returns>A TilesetModel which can be serialized to a tileset.json file.</returns>
+    protected TilesetModel GenerateTileSet(IList<Tile> children)
     {
-        if (!_tiles.Any()) return null;
-
         Asset asset = new Asset()
         {
             version = this._version,
@@ -108,9 +93,7 @@ public class Tileset
                 0, 0, rootHalfZ
             }
         };
-
-        var children = this._structureGenerator.generateStructure(this._tiles);
-
+        
         Root root = new Root()
         {
             boundingVolume = rootBox,
@@ -130,66 +113,15 @@ public class Tileset
             geometricError = _tilesetGeometricError
         };
     }
-    
-    /// <summary>
-    /// Add a tile to the tileset.
-    /// </summary>
-    /// <param name="geographicalExtent">An array representing the geographical extent: [minx, miny, minz, maxx, maxy, maxz]</param>
-    /// <param name="uri">The content uri relative to the tileset file.</param>
-    public void AddTile(
-        double[] geographicalExtent,
-        string uri)
-    {
-        decimal tileMinX = (decimal)geographicalExtent[0];
-        decimal tileMaxX = (decimal)geographicalExtent[3];
-        decimal tileMinY = (decimal)geographicalExtent[1];
-        decimal tileMaxY = (decimal)geographicalExtent[4];
-        decimal tileMinZ = (decimal)geographicalExtent[2];
-        decimal tileMaxZ = (decimal)geographicalExtent[5];
-        decimal tileCenterX = this.CalculateCenter(tileMaxX, tileMinX);
-        decimal tileCenterY = this.CalculateCenter(tileMaxY, tileMinY);
-        decimal tileCenterZ = this.CalculateCenter(tileMaxZ, tileMinZ);
-        decimal tileHalfX = this.CalculateHalfLength(tileMaxX, tileMinX);
-        decimal tileHalfY = this.CalculateHalfLength(tileMaxY, tileMinY);
-        decimal tileHalfZ = this.CalculateHalfLength(tileMaxZ, tileMinZ);
-        Console.WriteLine(tileCenterX);
-        BoxVolume boxVolume = new BoxVolume()
-        {
-            box = new decimal[12]
-            {
-                tileCenterX, tileCenterY, tileCenterZ,
-                tileHalfX, 0, 0,
-                0, tileHalfY, 0,
-                0, 0, tileHalfZ
-            }
-        };
 
-        Content content = new Content()
-        {
-            uri = uri
-        };
-        
-        Tile tile = new Tile()
-        {
-            boundingVolume = boxVolume,
-            content = content,
-            geometricError = this._tileGeometricError
-        };
-        
-        this._tiles.Add(tile);
-
-        // Ensure the max and min values are set, if needed
-        this._updateMinMaxX(tileMaxX, tileMinX);
-        this._updateMinMaxY(tileMaxY, tileMinY);
-        this._updateMinMaxZ(tileMaxZ, tileMinZ);
-    }
+    public abstract void AddTile(double[] geographicalExtent, string uri);
 
     /// <summary>
     /// Update (if required) the max / min x coords of our tileset.
     /// </summary>
     /// <param name="tileMaxX">Tile max x.</param>
     /// <param name="tileMinX">Tile min x.</param>
-    private void _updateMinMaxX(decimal tileMaxX, decimal tileMinX)
+    protected void _updateMinMaxX(decimal tileMaxX, decimal tileMinX)
     {
         if (this._maxX == null) this._maxX = tileMaxX;
         else if (tileMaxX > this._maxX) this._maxX = tileMaxX;
@@ -203,7 +135,7 @@ public class Tileset
     /// </summary>
     /// <param name="tileMaxY">Tile max y.</param>
     /// <param name="tileMinY">Tile min y.</param>
-    private void _updateMinMaxY(decimal tileMaxY, decimal tileMinY)
+    protected void _updateMinMaxY(decimal tileMaxY, decimal tileMinY)
     {
         if (this._maxY == null) this._maxY = tileMaxY;
         else if (tileMaxY > this._maxY) this._maxY = tileMaxY;
@@ -217,7 +149,7 @@ public class Tileset
     /// </summary>
     /// <param name="tileMaxZ">Tile max z.</param>
     /// <param name="tileMinZ">Tile min z.</param>
-    private void _updateMinMaxZ(decimal tileMaxZ, decimal tileMinZ)
+    protected void _updateMinMaxZ(decimal tileMaxZ, decimal tileMinZ)
     {
         if (this._maxZ == null) this._maxZ = tileMaxZ;
         else if (tileMaxZ > this._maxZ) this._maxZ = tileMaxZ;
@@ -231,7 +163,7 @@ public class Tileset
     /// <param name="maxCoordPoint">The max coord.</param>
     /// <param name="minCoordPoint">The min coord.</param>
     /// <returns>The center of both coords as decimal.</returns>
-    private decimal CalculateCenter(decimal maxCoordPoint, decimal minCoordPoint)
+    protected decimal CalculateCenter(decimal maxCoordPoint, decimal minCoordPoint)
     {
         Console.WriteLine(this.CalculateHalfLength(maxCoordPoint, minCoordPoint));
         return this.CalculateHalfLength(maxCoordPoint, minCoordPoint) + minCoordPoint;
@@ -243,7 +175,7 @@ public class Tileset
     /// <param name="maxCoordPoint">The max coord.</param>
     /// <param name="minCoordPoint">The min coord.</param>
     /// <returns>The half value of two coords, as decimal.</returns>
-    public decimal CalculateHalfLength(decimal maxCoordPoint, decimal minCoordPoint)
+    protected decimal CalculateHalfLength(decimal maxCoordPoint, decimal minCoordPoint)
     {
         return (maxCoordPoint - minCoordPoint) / 2;
     }
