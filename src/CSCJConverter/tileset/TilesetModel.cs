@@ -7,7 +7,6 @@ namespace CSCJConverter.tileset;
 /// Tileset model for a 3D Tiles tileset.json file.
 /// Does not fully implement the spec (e.g. not all options are allowed!)
 /// </summary>
-
 public class BoxVolume
 {
     public decimal[] box { get; init; }
