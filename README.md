@@ -3,7 +3,7 @@
   C# applicatie voor het bewerken van CityJSON 1.1 3D BAG bestanden.
   
   **Functionaliteit**
-  - Aanpassen van hoekpunten aan de hand van maaiveldhoogte;
+  - Aanpassen van hoekpunten aan de hand van maaiveldhoogte (vereist h_maaiveld attribuut op ouder object!);
   - Genereren van een GRID tegelset JSON bestand op basis van CityJSON 1.1;
   - Toevoegen van tegels (CityJSON 1.1) aan een GRID tegelset JSON bestand.
 
@@ -21,11 +21,45 @@ cj.TranslateHeightMaaiveld();
 cj.Serialize();
 ```
 
-## Tegelset genereren
-
-## Opmerkingen
+### Opmerking
 
 Huidige versie doet geen controles. Bijvoorbeeld checken of alle hoekpunten zijn bijgewerkt of dat er een valide bestand wordt ingeladen.
+
+## Tegelset genereren
+
+```cs
+GridTileset tileset = new GridTileset();
+        
+string cj1 = File.ReadAllText(@"C:\path\to\cityjson\cj1.json");
+double[] cj1geo = JsonSerializer.Deserialize<CityJSONModel>(cj1).metadata.geographicalExtent;
+tileset.AddTile(cj1, "cj1.b3dm");
+
+string cj2 = File.ReadAllText(@"C:\path\to\cityjson\cj2.json");
+double[] cj2geo = JsonSerializer.Deserialize<CityJSONModel>(cj2).metadata.geographicalExtent;
+tileset.AddTile(cj1, "cj2.b3dm");
+
+TilesetModel model = tileset.GenerateTileset();
+        
+string serializeString = JsonSerializer.Serialize<TilesetModel>(model); 
+File.WriteAllText(@"C:\output\dir\tileset.json", serializeString);
+```
+
+## CityJSON toevoegen aan bestaand tegelset bestand
+
+```cs
+string tilesetString = File.ReadAllText(@"C:\output\dir\tileset.json");
+TilesetModel tilesetModel = JsonSerializer.Deserialize<TilesetModel>(tilesetString);
+GridTileset gridTileset = new GridTileset(tilesetModel);
+
+string cj3 = File.ReadAllText(@"C:\path\to\cityjson\cj3.json");
+double[] cj3geo = JsonSerializer.Deserialize<CityJSONModel>(cj3).metadata.geographicalExtent;
+tileset.AddTile(cj1, "cj3.b3dm");
+
+TilesetModel newModel = tileset.GenerateTileset();
+        
+string serializeString = JsonSerializer.Serialize<TilesetModel>(newModel); 
+File.WriteAllText(@"C:\output\dir\newtileset.json", serializeString);
+```
 
 # Tegelset ondersteuning
 
