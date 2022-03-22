@@ -5,7 +5,7 @@ public class GridTileset : AbstractTileset
     private List<Tile> _tiles;
 
     /// <summary>
-    /// Constructor for the base Tileset class used to build a tileset.
+    /// Constructor for the GRID Tileset class used to build a GRID tileset.
     /// </summary>
     /// <param name="tilesetGeometricError">
     ///     The error, in meters, introduced if this tileset is not rendered. At runtime, the geometric error is used
@@ -37,6 +37,12 @@ public class GridTileset : AbstractTileset
         this._tiles = new List<Tile>();
     }
 
+    /// <summary>
+    /// Constructor for the GRID Tileset, used for appending tiles in CityJSON form to an existing tileset.
+    /// </summary>
+    /// <param name="model">TilesetModel object to which tiles can be appended.</param>
+    /// <param name="version">The version of 3D Tiles. Default: 1.0</param>
+    /// <param name="tilesetVersion">Application-specific version of this tileset. Default: 1.0</param>
     public GridTileset(TilesetModel model, string version = "1.0", string tilesetVersion = "1.0") : base(model, version, tilesetVersion)
     {
         this._tiles = model.root.children.ToList();
@@ -50,6 +56,15 @@ public class GridTileset : AbstractTileset
     {
         var children = this._tiles;
         return this.BuildTileSet(children);
+    }
+
+    /// <summary>
+    /// Return the number of tiles currently in the tileset.
+    /// </summary>
+    /// <returns>Integer representing the amount of tiles.</returns>
+    public override int CountTiles()
+    {
+        return this._tiles.Count();
     }
 
     /// <summary>

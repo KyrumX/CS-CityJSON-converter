@@ -54,4 +54,18 @@ public class AppendToGridTilesetTests : IClassFixture<AppendToGridTilesetFixture
         Assert.Equal(expectedTileError, newlyAppendedTile.geometricError);
         Assert.Null(newlyAppendedTile.children);
     }
+
+    [Fact]
+    public void TestCountMethod()
+    {
+        // Arrange
+        int expectedCount = 3;
+
+        // Act
+        AbstractTileset tileset = new GridTileset(_tilsetFixture.model);
+        int res = tileset.CountTiles();
+
+        // Assert
+        Assert.Equal(expectedCount, res);
+    }
 }
