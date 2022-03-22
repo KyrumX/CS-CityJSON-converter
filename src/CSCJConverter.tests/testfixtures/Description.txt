@@ -9,3 +9,10 @@ One extra vertex has been added, which does not belong to any of our buildings:
 This vertex is outside our 'geographicalExtent', which would make it invalid.
 This doesn't matter though since this vertex was added to verify it wouldn't be touched by our
 functionality, whereas all other vertices (which do belong to our shed) should be.
+
+The test_moved_1122,test_moved_3370,test_moved_6228 are used to test the tileset generator.
+The features of these tiles have been moved to all start at 0 meters.
+Tile 1122 has been moved to have its south-west corner (bottom left) to be 0,0. 
+All features of the three tiles have been shifted accordingly: x_change = -94314.305 y_change = -437655.94
+Note that the bounding box of 3370 has been lowered, starting at -1. 
+Loading the tiles in order of 6228, 3370 and finally 1122 in our tests will mean all paths of _updateMinMax{} are covered.

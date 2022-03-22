@@ -52,7 +52,7 @@ public class GridTilesetTestAddTile : IClassFixture<GridTilsetFixture>
         string expectedVersion = "1.0";
         string expectedGLTFUpAxis = "z";
         decimal expectedTilesetError = 260m;
-        IEnumerable<decimal> expectedBox = new decimal[12] {  2490.8535m, 1266.6625m, 30.3125m, 2490.8535m, 0, 0, 0,1266.6625m, 0, 0, 0, 30.3125m };
+        IEnumerable<decimal> expectedBox = new decimal[12] {  2490.8535m, 1266.6625m, 29.8125m, 2490.8535m, 0, 0, 0,1266.6625m, 0, 0, 0, 30.8125m };
         IEnumerable<int> expectedTransform = new int[16] { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
         decimal expectedRootError = 4.5398975185470771m;
         string expectedRefineMethod = "REPLACE";
@@ -60,7 +60,7 @@ public class GridTilesetTestAddTile : IClassFixture<GridTilsetFixture>
         string expectedContentUri = this._tilsetFixture.contentUri6228;
         decimal expectedTileError = 2.3232m;
         
-        // Act
+        // Act -- Voeg drie tegels toe, de volgorde maakt hier uit (voor de _updateMinMax{} functies)
         _tilsetFixture.tileset.AddTile(_tilsetFixture.geographicalExtent6228, _tilsetFixture.contentUri6228);
         _tilsetFixture.tileset.AddTile(_tilsetFixture.geographicalExtent3370, _tilsetFixture.contentUri3370);
         _tilsetFixture.tileset.AddTile(_tilsetFixture.geographicalExtent1122, _tilsetFixture.contentUri1122);

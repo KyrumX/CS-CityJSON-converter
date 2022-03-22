@@ -126,7 +126,6 @@ public abstract class AbstractTileset : ITileset
     {
         if (this._maxX == null) this._maxX = tileMaxX;
         else if (tileMaxX > this._maxX) this._maxX = tileMaxX;
-                
         if (this._minX == null) this._minX = tileMinX;
         else if (tileMinX < this._minX) this._minX = tileMinX;
     }
