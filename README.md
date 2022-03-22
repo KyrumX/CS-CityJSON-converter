@@ -64,6 +64,7 @@ File.WriteAllText(@"C:\output\dir\newtileset.json", serializeString);
 # Tegelset ondersteuning
 
 Onderstaande tabellen laten zien met welke eigenschappenen onze tegelset generator kan werken. Eigenschappen welke niet in het overzicht staan zullen worden verwijderd bij het inlezen van een bestaand tegelset bestand.
+Zie officiële specificatie: [3D Tiles specificatie versie 1.0](https://github.com/CesiumGS/3d-tiles/blob/main/specification/README.md)
 
 ## Tileset
 
