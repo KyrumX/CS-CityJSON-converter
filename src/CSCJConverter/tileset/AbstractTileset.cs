@@ -10,6 +10,7 @@ public abstract class AbstractTileset : ITileset
     private decimal? _minZ;
 
     private readonly string _version;
+    private readonly string _tilesetVersion;
     private readonly string _gltfUpAxis;
 
     private readonly decimal _tilesetGeometricError;
@@ -39,23 +40,49 @@ public abstract class AbstractTileset : ITileset
     ///     the geometric error is used to compute screen space error (SSE), i.e., the error measured in pixels.
     ///     Default: 2.3232
     /// </param>
-    /// <param name="version">Default: 1.0</param>
-    /// <param name="gltfUpAxis">Default: z</param>
+    /// <param name="version">The version of 3D Tiles. Default: 1.0</param>
+    /// <param name="tilesetVersion">Application-specific version of this tileset. Default: 1.0</param>
+    /// <param name="gltfUpAxis">The up axis for the used glTF files. Default: z</param>
     /// <param name="refineMethod">Default: REPLACE</param>
-    /// <param name="structureType">Default: GRID</param>
     public AbstractTileset(decimal tilesetGeometricError = 260,
         decimal rootGeometricError = 4.5398975185470771m,
         decimal tileGeometricError = 2.3232m,
         string version = "1.0",
+        string tilesetVersion = "1.0",
         string gltfUpAxis = "z",
         RefineMethods refineMethod = RefineMethods.REPLACE)
     {
         this._version = version;
+        this._tilesetVersion = tilesetVersion;
         this._gltfUpAxis = gltfUpAxis;
         this._rootRefineMethod = refineMethod == RefineMethods.ADD ? "ADD" : "REPLACE";
         this._tilesetGeometricError = tilesetGeometricError;
         this._rootGeometricError = rootGeometricError;
         this._tileGeometricError = tileGeometricError;
+    }
+
+    public AbstractTileset(TilesetModel model, string version = "1.0", string tilesetVersion = "1.0")
+    {
+        this._version = version;
+        this._tilesetVersion = tilesetVersion;
+        this._gltfUpAxis = model.asset.gltfUpAxis.Any() ? model.asset.gltfUpAxis : "z";
+        this._tilesetGeometricError = model.geometricError;
+        this._rootRefineMethod = model.root.refine.Any() ? model.root.refine : "REPLACE";
+        this._rootGeometricError = model.root.geometricError;
+        this._tileGeometricError = model.root.children.Any() ? model.root.children.First().geometricError : 2.3232m;
+        
+        // NOTE: Alleen BOX is ondersteund! Sphere en Region worden niet ondersteund, ook niet in TilesetModel.
+        // De eerste drie elementen beschrijven de x, y en z waarden voor het center van de box.
+        // De volgende drie elementen (met indices 3, 4, en 5) beschrijven de x-as richting en een halve lengte.
+        var box = model.root.boundingVolume.box;
+        this._maxX = box[0] + box[3] + box[4] + box[5];
+        this._minX = box[0] - box[3] - box[4] - box[5];
+        // De volgende drie elementen (met indices 6, 7, en 8) beschrijven de y-as richting en een halve lengte.
+        this._maxY = box[1] + box[6] + box[7] + box[8];
+        this._minY = box[1] - box[6] - box[7] - box[8];
+        // De laatste drie elementen (met indices 9, 10 en 11) beschrijven de z-as richting en een halve lengte.
+        this._maxZ = box[2] + box[9] + box[10] + box[11];
+        this._minZ = box[2] - box[9] - box[10] - box[11];
     }
 
     /// <summary>
@@ -73,6 +100,7 @@ public abstract class AbstractTileset : ITileset
         Asset asset = new Asset()
         {
             version = this._version,
+            tilesetVersion = _tilesetVersion,
             gltfUpAxis = this._gltfUpAxis
 
         };
