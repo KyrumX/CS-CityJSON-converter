@@ -61,6 +61,12 @@ public abstract class AbstractTileset : ITileset
         this._tileGeometricError = tileGeometricError;
     }
 
+    /// <summary>
+    /// Constructor for the base Tileset, used for appending tiles in CityJSON form to an existing tileset.
+    /// </summary>
+    /// <param name="model">TilesetModel object to which tiles can be appended.</param>
+    /// <param name="version">The version of 3D Tiles. Default: 1.0</param>
+    /// <param name="tilesetVersion">Application-specific version of this tileset. Default: 1.0</param>
     public AbstractTileset(TilesetModel model, string version = "1.0", string tilesetVersion = "1.0")
     {
         this._version = version;
@@ -144,6 +150,7 @@ public abstract class AbstractTileset : ITileset
 
     public abstract TilesetModel GenerateTileset();
     public abstract void AddTile(double[] geographicalExtent, string uri);
+    public abstract int CountTiles();
 
     /// <summary>
     /// Update (if required) the max / min x coords of our tileset.
@@ -206,6 +213,4 @@ public abstract class AbstractTileset : ITileset
     {
         return (maxCoordPoint - minCoordPoint) / 2;
     }
-    
-    
 }
