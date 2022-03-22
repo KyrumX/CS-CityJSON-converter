@@ -58,6 +58,29 @@ public abstract class AbstractTileset : ITileset
         this._tileGeometricError = tileGeometricError;
     }
 
+    public AbstractTileset(TilesetModel model, string version = "1.0")
+    {
+        this._version = version;
+        this._gltfUpAxis = model.asset.gltfUpAxis.Any() ? model.asset.gltfUpAxis : "z";
+        this._tilesetGeometricError = model.geometricError;
+        this._rootRefineMethod = model.root.refine.Any() ? model.root.refine : "REPLACE";
+        this._rootGeometricError = model.root.geometricError;
+        this._tileGeometricError = model.root.children.Any() ? model.root.children.First().geometricError : 2.3232m;
+        
+        // NOTE: Alleen BOX is ondersteund! Sphere en Region worden niet ondersteund, ook niet in TilesetModel.
+        // De eerste drie elementen beschrijven de x, y en z waarden voor het center van de box.
+        // De volgende drie elementen (met indices 3, 4, en 5) beschrijven de x-as richting en een halve lengte.
+        var box = model.root.boundingVolume.box;
+        this._maxX = box[0] + box[3] + box[4] + box[5];
+        this._minX = box[0] - box[3] - box[4] - box[5];
+        // De volgende drie elementen (met indices 6, 7, en 8) beschrijven de y-as richting en een halve lengte.
+        this._maxY = box[1] + box[6] + box[7] + box[8];
+        this._minY = box[1] - box[6] - box[7] - box[8];
+        // De laatste drie elementen (met indices 9, 10 en 11) beschrijven de z-as richting en een halve lengte.
+        this._maxZ = box[2] + box[9] + box[10] + box[11];
+        this._minZ = box[2] - box[9] - box[10] - box[11];
+    }
+
     /// <summary>
     /// Base generator for a tileset. Adds an IEnumerable of children onto a root
     /// tile. Does not support content on the root tile!

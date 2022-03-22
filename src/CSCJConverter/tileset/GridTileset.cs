@@ -36,6 +36,11 @@ public class GridTileset : AbstractTileset
         this._tiles = new List<Tile>();
     }
 
+    public GridTileset(TilesetModel model, string version = "1.0") : base(model, version)
+    {
+        this._tiles = model.root.children.ToList();
+    }
+
     /// <summary>
     /// Generate a TilesetModel, which can be serialized to json. Children will use a grid setup.
     /// </summary>
