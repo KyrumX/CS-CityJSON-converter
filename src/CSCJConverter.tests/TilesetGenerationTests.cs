@@ -23,6 +23,7 @@ public class GridTilesetTestAddTile : IClassFixture<GenerateFreshGridTilesetFixt
     {
         // Arrange
         string expectedVersion = "1.0";
+        string expectedTilesetVersion = "1.0";
         string expectedGLTFUpAxis = "z";
         decimal expectedTilesetError = 260m;
         IEnumerable<decimal> expectedBox = new decimal[12] {  2490.8535m, 1266.6625m, 29.8125m, 2490.8535m, 0, 0, 0,1266.6625m, 0, 0, 0, 30.8125m };
@@ -42,6 +43,7 @@ public class GridTilesetTestAddTile : IClassFixture<GenerateFreshGridTilesetFixt
         
         // Assert
         Assert.Equal(expectedVersion, model.asset.version);
+        Assert.Equal(expectedTilesetVersion, model.asset.tilesetVersion);
         Assert.Equal(expectedGLTFUpAxis, model.asset.gltfUpAxis);
         Assert.Equal(expectedTilesetError, model.geometricError);
         Assert.Equal(expectedBox, model.root.boundingVolume.box);

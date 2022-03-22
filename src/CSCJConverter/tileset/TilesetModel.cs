@@ -29,6 +29,8 @@ public class Tile
 public class Asset
 {
     public string version { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string tilesetVersion { get; init; }
     public string gltfUpAxis { get; init; }
 }
 

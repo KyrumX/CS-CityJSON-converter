@@ -5,7 +5,7 @@ public class GridTileset : AbstractTileset
     private List<Tile> _tiles;
 
     /// <summary>
-    /// Constructor for a grid based Tileset.
+    /// Constructor for the base Tileset class used to build a tileset.
     /// </summary>
     /// <param name="tilesetGeometricError">
     ///     The error, in meters, introduced if this tileset is not rendered. At runtime, the geometric error is used
@@ -20,23 +20,24 @@ public class GridTileset : AbstractTileset
     ///     the geometric error is used to compute screen space error (SSE), i.e., the error measured in pixels.
     ///     Default: 2.3232
     /// </param>
-    /// <param name="version">Default: 1.0</param>
-    /// <param name="gltfUpAxis">Default: z</param>
+    /// <param name="version">The version of 3D Tiles. Default: 1.0</param>
+    /// <param name="tilesetVersion">Application-specific version of this tileset. Default: 1.0</param>
+    /// <param name="gltfUpAxis">The up axis for the used glTF files. Default: z</param>
     /// <param name="refineMethod">Default: REPLACE</param>
-    /// <param name="structureType">Default: GRID</param>
     public GridTileset(
        decimal tilesetGeometricError = 260,
        decimal rootGeometricError = 4.5398975185470771m,
        decimal tileGeometricError = 2.3232m,
        string version = "1.0",
+       string tilesetVersion = "1.0",
        string gltfUpAxis = "z",
-       RefineMethods refineMethod = RefineMethods.REPLACE) : base(tilesetGeometricError, rootGeometricError, tileGeometricError, version, gltfUpAxis, refineMethod)
+       RefineMethods refineMethod = RefineMethods.REPLACE) : base(tilesetGeometricError, rootGeometricError, tileGeometricError, version, tilesetVersion, gltfUpAxis, refineMethod)
     {
         // Een grid is niets anders dan een lijst van tegels, een tegel heeft dan geen eigen kinder tegels:
         this._tiles = new List<Tile>();
     }
 
-    public GridTileset(TilesetModel model, string version = "1.0") : base(model, version)
+    public GridTileset(TilesetModel model, string version = "1.0", string tilesetVersion = "1.0") : base(model, version, tilesetVersion)
     {
         this._tiles = model.root.children.ToList();
     }

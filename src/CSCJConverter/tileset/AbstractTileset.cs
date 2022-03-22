@@ -10,6 +10,7 @@ public abstract class AbstractTileset : ITileset
     private decimal? _minZ;
 
     private readonly string _version;
+    private readonly string _tilesetVersion;
     private readonly string _gltfUpAxis;
 
     private readonly decimal _tilesetGeometricError;
@@ -39,18 +40,20 @@ public abstract class AbstractTileset : ITileset
     ///     the geometric error is used to compute screen space error (SSE), i.e., the error measured in pixels.
     ///     Default: 2.3232
     /// </param>
-    /// <param name="version">Default: 1.0</param>
-    /// <param name="gltfUpAxis">Default: z</param>
+    /// <param name="version">The version of 3D Tiles. Default: 1.0</param>
+    /// <param name="tilesetVersion">Application-specific version of this tileset. Default: 1.0</param>
+    /// <param name="gltfUpAxis">The up axis for the used glTF files. Default: z</param>
     /// <param name="refineMethod">Default: REPLACE</param>
-    /// <param name="structureType">Default: GRID</param>
     public AbstractTileset(decimal tilesetGeometricError = 260,
         decimal rootGeometricError = 4.5398975185470771m,
         decimal tileGeometricError = 2.3232m,
         string version = "1.0",
+        string tilesetVersion = "1.0",
         string gltfUpAxis = "z",
         RefineMethods refineMethod = RefineMethods.REPLACE)
     {
         this._version = version;
+        this._tilesetVersion = tilesetVersion;
         this._gltfUpAxis = gltfUpAxis;
         this._rootRefineMethod = refineMethod == RefineMethods.ADD ? "ADD" : "REPLACE";
         this._tilesetGeometricError = tilesetGeometricError;
@@ -58,9 +61,10 @@ public abstract class AbstractTileset : ITileset
         this._tileGeometricError = tileGeometricError;
     }
 
-    public AbstractTileset(TilesetModel model, string version = "1.0")
+    public AbstractTileset(TilesetModel model, string version = "1.0", string tilesetVersion = "1.0")
     {
         this._version = version;
+        this._tilesetVersion = tilesetVersion;
         this._gltfUpAxis = model.asset.gltfUpAxis.Any() ? model.asset.gltfUpAxis : "z";
         this._tilesetGeometricError = model.geometricError;
         this._rootRefineMethod = model.root.refine.Any() ? model.root.refine : "REPLACE";
@@ -96,6 +100,7 @@ public abstract class AbstractTileset : ITileset
         Asset asset = new Asset()
         {
             version = this._version,
+            tilesetVersion = _tilesetVersion,
             gltfUpAxis = this._gltfUpAxis
 
         };
