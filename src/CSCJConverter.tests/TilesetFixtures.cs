@@ -27,22 +27,20 @@ public class GenerateFreshGridTilesetFixture
     }
 }
 
-public class AppendToGridTilesetFixture : GenerateFreshGridTilesetFixture
+public class AppendToGridTilesetFixture
 {
     public TilesetModel model;
     public double[] geographicalExtent3369;
     public string contentUri3369;
     
-    public AppendToGridTilesetFixture() : base()
+    public AppendToGridTilesetFixture()
     {
         string json3369 = File.ReadAllText(@"testfixtures/test_moved_3369.json");
         geographicalExtent3369 = JsonSerializer.Deserialize<CityJSONModel>(json3369).metadata.geographicalExtent;
         contentUri3369 = "3369.b3dm";
-        AbstractTileset tileset = new GridTileset();
-        tileset.AddTile(geographicalExtent6228, contentUri6228);
-        tileset.AddTile(geographicalExtent3370, contentUri3370);
-        tileset.AddTile(geographicalExtent1122, contentUri1122);
-
-        model = tileset.GenerateTileset();
+        
+        // Lees bestaande tegelset
+        string tilesetString = File.ReadAllText(@"testfixtures/test_tileset.json");
+        model = JsonSerializer.Deserialize<TilesetModel>(tilesetString);
     }
 }

@@ -32,11 +32,11 @@ GridTileset tileset = new GridTileset();
         
 string cj1 = File.ReadAllText(@"C:\path\to\cityjson\cj1.json");
 double[] cj1geo = JsonSerializer.Deserialize<CityJSONModel>(cj1).metadata.geographicalExtent;
-tileset.AddTile(cj1, "cj1.b3dm");
+tileset.AddTile(cj1geo, "cj1.b3dm");
 
 string cj2 = File.ReadAllText(@"C:\path\to\cityjson\cj2.json");
 double[] cj2geo = JsonSerializer.Deserialize<CityJSONModel>(cj2).metadata.geographicalExtent;
-tileset.AddTile(cj1, "cj2.b3dm");
+tileset.AddTile(cj2geo, "cj2.b3dm");
 
 TilesetModel model = tileset.GenerateTileset();
         
@@ -53,7 +53,7 @@ GridTileset gridTileset = new GridTileset(tilesetModel);
 
 string cj3 = File.ReadAllText(@"C:\path\to\cityjson\cj3.json");
 double[] cj3geo = JsonSerializer.Deserialize<CityJSONModel>(cj3).metadata.geographicalExtent;
-tileset.AddTile(cj1, "cj3.b3dm");
+tileset.AddTile(cj3geo, "cj3.b3dm");
 
 TilesetModel newModel = tileset.GenerateTileset();
         
